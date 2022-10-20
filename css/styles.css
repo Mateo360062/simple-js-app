@@ -1,0 +1,10 @@
+.selected {
+  background-color: mistyrose;
+  
+}
+ul {
+  list-style-type: none ;
+}
+button {
+  cursor: pointer;
+}
