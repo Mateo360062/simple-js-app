@@ -17,28 +17,22 @@ let pokemonRepository = (function(){
         let listItem = document.createElement('li');
         let button = document.createElement('button');
         button.innerText = pokemon.name;
-        button.addEventListener('click', showDetails);
+        button.addEventListener('click', function(){ console.log(pokemon) });
         button.classList.add('selected');
         listItem.appendChild(button);
         unorderedList.appendChild(listItem);
       }
-      function showDetails(pokemon){
-       console.log(pokemon)
-      }
       return {
         getAll: getAll,
         add: add,
-        addListItem: addListItem,
-        showDetails: showDetails
+        addListItem: addListItem
       }
     }
     )();
     
     pokemonRepository.addListItem({name:'Gengar',height:4, type: 'water'})
-    document.write(JSON.stringify(pokemonRepository.getAll()))
-    pokemonRepository.getAll().forEach(function(pokemon){
-      pokemonRepository.addListItem(pokemon);
-    })
+
+    
 
     
     
