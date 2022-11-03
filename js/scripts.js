@@ -1,9 +1,6 @@
 let pokemonRepository = (function(){
-  let pokemonList = [
-    {name: 'Gastly', height: 3, type: ['ghost', 'poison']},
-    {name: 'Milotic', height: 9, type: ['dragon', 'water']},
-    {name: 'Steelix', height: 8, type: ['steel', 'rock']}
-  ]
+  let pokemonList = []
+  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150'
   function getAll(){
     return pokemonList
   }
@@ -17,20 +14,59 @@ let pokemonRepository = (function(){
         let listItem = document.createElement('li');
         let button = document.createElement('button');
         button.innerText = pokemon.name;
-        button.addEventListener('click', function(){ console.log(pokemon) });
+        button.addEventListener('click', showDetails)
         button.classList.add('selected');
         listItem.appendChild(button);
         unorderedList.appendChild(listItem);
       }
+      function loadList(){
+        return fetch(apiUrl).then(function(response){
+          return response.json();
+        }).then(function(json){
+          json.results.forEach(function(item){
+            let pokemon = {
+              name: item.name,
+              detailsUrl: item.url
+            };
+             add(pokemon);
+          }).catch(function (e){
+            console.error(e)
+          })
+        })
+      }
+      function loadDetails(){
+        let url = detailsUrl
+        return fetch(url).then(function(response){
+          return response.json();
+        }).then(function(details){
+          item.imageUrl = details.sprites.front_default;
+          item.height = details.height;
+          item.types = details.types;
+        }).catch(function(e){
+          console.error(e);
+        })
+      }
+      function showDetails(pokemon){
+        loadDetails(pokemon).then(function(){
+          console.log(pokemon);
+        })
+      }
       return {
         getAll: getAll,
         add: add,
-        addListItem: addListItem
+        addListItem: addListItem,
+        loadList: loadList,
+        loadDetails: loadDetails,
+        showDetails: showDetails
       }
     }
     )();
+    pokemonRepository.loadList().then(function(){
+      pokemonRepository.getAll.forEach(function(pokemon){
+        pokemonRepository.addListItem(pokemon);
+      })
+    })
     
-    pokemonRepository.addListItem({name:'Gengar',height:4, type: 'water'})
 
     
 
